@@ -45,3 +45,11 @@ public class Conexion {
      * Método estático para obtener la conexión a la base de datos.
      * @return Objeto Connection o null si falla.
      */
+/**
+     * Método estático para obtener la conexión a la base de datos.
+     * @return Objeto Connection o null si falla.
+     */
+/**
+     * Método estático para obtener la conexión a la base de datos.
+     * @return Objeto Connection o null si falla.
+     */
