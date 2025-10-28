@@ -651,3 +651,5 @@ public class Estacionamiento extends javax.swing.JFrame {
     }
 }
 }
+
+// Si ambos están vacíos, pide al usuario que ingrese datos.
