@@ -10,24 +10,37 @@ package conex;
  */
 public class Usuario {
     private int id;
-    private String nombreCompleto;
+    private String nombre_completo;
     private String correo;
     private String contrasena;
     private String rol;
     private String telefono;
 
-    public Usuario(String nombreCompleto, String correo, String contrasena, String rol, String telefono) {
-        this.nombreCompleto = nombreCompleto;
+    public Usuario() {}
+
+    public Usuario(String nombre_completo, String correo, String contrasena, String rol, String telefono) {
+        this.nombre_completo = nombre_completo;
         this.correo = correo;
         this.contrasena = contrasena;
         this.rol = rol;
         this.telefono = telefono;
     }
 
-    public String getNombreCompleto() { return nombreCompleto; }
-    public String getCorreo() { return correo; }
-    public String getContrasena() { return contrasena; }
-    public String getRol() { return rol; }
-    public String getTelefono() { return telefono; }
-}
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
+    public String getNombre_completo() { return nombre_completo; }
+    public void setNombre_completo(String nombre_completo) { this.nombre_completo = nombre_completo; }
+
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
+
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
+
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+}
