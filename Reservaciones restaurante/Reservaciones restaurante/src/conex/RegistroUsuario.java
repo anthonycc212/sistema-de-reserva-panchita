@@ -14,6 +14,7 @@ public class RegistroUsuario extends JFrame {
     private JTable tablaUsuarios;
     private DefaultTableModel modelo;
     private UsuarioDAO dao = new UsuarioDAO();
+    
 
     public RegistroUsuario() {
         setTitle("Registro de Usuarios");
@@ -106,7 +107,16 @@ public class RegistroUsuario extends JFrame {
             u.setContrasena(txtContrasena.getText());
             u.setTelefono(txtTelefono.getText());
             u.setRol(txtRol.getText());
+String contrasena = txtContrasena.getText();
 
+if (!validarContrasena(contrasena)) {
+    JOptionPane.showMessageDialog(this,
+        "La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, " +
+        "una minúscula, un número y un carácter especial (@$!%*?&._-).",
+        "Contraseña inválida",
+        JOptionPane.WARNING_MESSAGE);
+    return; // Detiene el registro
+}
             if (dao.registrar(u)) {
                 JOptionPane.showMessageDialog(this, "Usuario registrado correctamente");
                 listarUsuarios();
@@ -197,4 +207,8 @@ public class RegistroUsuario extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new RegistroUsuario().setVisible(true));
     }
+    private boolean validarContrasena(String contrasena) {
+    String patron = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&._-])[A-Za-z\\d@$!%*?&._-]{8,}$";
+    return contrasena.matches(patron);
+}
 }
