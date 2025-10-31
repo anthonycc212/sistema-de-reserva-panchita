@@ -89,7 +89,7 @@ public class RegistroUsuario extends JFrame {
         btnLimpiar.setBounds(420, 220, 120, 30);
         add(btnLimpiar);
 
-        // ----- Tabla -----
+        // Tabla 
         String[] columnas = {"ID", "Nombre", "Correo", "Rol", "Teléfono"};
         modelo = new DefaultTableModel(columnas, 0);
         tablaUsuarios = new JTable(modelo);
@@ -99,7 +99,7 @@ public class RegistroUsuario extends JFrame {
 
         listarUsuarios(); // Muestra todos los usuarios al iniciar
 
-        // ----- Acciones -----
+        //  Acciones 
         btnRegistrar.addActionListener(e -> {
             Usuario u = new Usuario();
             u.setNombre_completo(txtNombre.getText());
@@ -182,7 +182,7 @@ if (!validarContrasena(contrasena)) {
         btnLimpiar.addActionListener(e -> limpiarCampos());
     }
 
-    // ----- Métodos auxiliares -----
+    //  Métodos auxiliares lista
     private void listarUsuarios() {
         modelo.setRowCount(0);
         List<Usuario> lista = dao.listar();

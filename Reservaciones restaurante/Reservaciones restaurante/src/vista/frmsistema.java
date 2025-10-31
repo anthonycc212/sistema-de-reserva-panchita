@@ -656,6 +656,8 @@ private String determinarEstadoPago(String metodoPago) {
         jLabel19 = new javax.swing.JLabel();
         spnCapaci = new javax.swing.JSpinner();
         txtFecha = new javax.swing.JTextField();
+        btnModificar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         lblLugar1 = new javax.swing.JLabel();
         lblLugar2 = new javax.swing.JLabel();
@@ -1247,6 +1249,20 @@ private String determinarEstadoPago(String metodoPago) {
         jLabel19.setFont(new java.awt.Font("Yu Gothic UI Semilight", 3, 14)); // NOI18N
         jLabel19.setText("Capacidad");
 
+        btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1278,8 +1294,15 @@ private String determinarEstadoPago(String metodoPago) {
                     .addComponent(txtFecha))
                 .addGap(68, 68, 68))
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(btnreservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(btnreservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(btnModificar)
+                        .addGap(80, 80, 80)
+                        .addComponent(btnEliminar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -1307,9 +1330,13 @@ private String determinarEstadoPago(String metodoPago) {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(spinnerHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnreservaciones)
-                .addGap(24, 24, 24))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModificar)
+                    .addComponent(btnEliminar))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         jPanel5.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 340, 410));
@@ -1505,7 +1532,7 @@ private String determinarEstadoPago(String metodoPago) {
 
         jTabbedPane1.addTab("Platos", jPanel16);
 
-        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, 830, 550));
+        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 830, 550));
 
         btnreportes.setFont(new java.awt.Font("Microsoft New Tai Lue", 3, 12)); // NOI18N
         btnreportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportes.png"))); // NOI18N
@@ -1562,9 +1589,11 @@ private String determinarEstadoPago(String metodoPago) {
     String cliente = txtCliente.getText().trim();
     String fechaStr = txtFecha.getText().trim();
 
+
     if (mesa.isEmpty() || cliente.isEmpty() || fechaStr.isEmpty() || salaSeleccionada.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Complete todos los campos correctamente.");
         return;
+        
     }
 
     // 2. Obtener valores básicos
@@ -1609,6 +1638,8 @@ private String determinarEstadoPago(String metodoPago) {
         ps.setDouble(10, precioFinal);
 
         int filas = ps.executeUpdate();
+        System.out.println("Mesa: " + mesa + " | Cliente: " + cliente + " | Fecha: " + fechaStr + " | Sala: " + salaSeleccionada);
+        System.out.println("Sala seleccionada: " + salaSeleccionada);
         if (filas > 0) {
             // Mostrar ticket con precio
             mostrarTicket(mesa, cliente, fechaStr, capacidad, horaEntera, 
@@ -1637,10 +1668,6 @@ private String determinarEstadoPago(String metodoPago) {
     }
    
     }//GEN-LAST:event_btnreservacionesActionPerformed
-
-    private void txtMesaSeleccionadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMesaSeleccionadaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMesaSeleccionadaActionPerformed
 
     private void btnLimpiarSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarSalaActionPerformed
         limpiarCamposSala();
@@ -1798,6 +1825,22 @@ private String determinarEstadoPago(String metodoPago) {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnreportesActionPerformed
 
+    private void txtMesaSeleccionadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMesaSeleccionadaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMesaSeleccionadaActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+btnModificar.addActionListener(e -> {
+    // Abre la ventana emergente de modificación
+    new VentanaModificarReserva(this);
+});
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+btnEliminar.addActionListener(e -> new VentanaEliminarReserva(this));        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1839,8 +1882,10 @@ private String determinarEstadoPago(String metodoPago) {
     private javax.swing.JTextField TxtNombreSala;
     private javax.swing.JButton btnAgregarSala;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarSala;
     private javax.swing.JButton btnLimpiarSala;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnModificarSala;
     private javax.swing.JButton btnReservar;
     private javax.swing.JButton btnabrirsalas;

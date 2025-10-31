@@ -51,7 +51,7 @@ public class loginDao {
         }
     }
 
-    // Nuevo método para validar login por correo y contraseña (usado por frmlogin.java)
+    //  método para validar login por correo y contraseña (copiado de frmlogin.java)
     public login logPorCorreo(String correo, String contrasena) {
         login usuario = null;
         String sql = "SELECT * FROM usuarios WHERE correo = ? AND contrasena = ?";

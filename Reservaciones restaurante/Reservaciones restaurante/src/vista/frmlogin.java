@@ -23,7 +23,7 @@ public class frmlogin extends javax.swing.JFrame {
         initComponents(); // Este método es generado automáticamente por NetBeans
         this.setLocationRelativeTo(null);
         txtCorreo.setText("admin@restaurante.com");
-        txtPass.setText("admin123");
+        txtPass.setText("Admin123-");
         barra.setVisible(false);
         ImageIcon img = new ImageIcon(getClass().getResource("/imagenes/user.png"));
         this.setIconImage(img.getImage());
