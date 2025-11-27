@@ -112,6 +112,7 @@ public class frmsistema extends javax.swing.JFrame {
     if (usuarioLogueado.getRol().equalsIgnoreCase("cliente")) {
         btnadministrador.setVisible(false); 
     }
+    
     if (usuarioLogueado.getRol().equalsIgnoreCase("cliente")) {
     btnadministrador.setVisible(false);  // Oculta el botón
     jPanel7.setVisible(false);           // Oculta el panel
@@ -463,7 +464,7 @@ private void mostrarTicket(String mesa, String cliente, String fecha, int capaci
     JDialog ticketDialog = new JDialog(this, "Ticket de Reserva", true);
     ticketDialog.setSize(500, 500);
     ticketDialog.setLayout(new BorderLayout());
-    
+    //ticket de reserva
     // Panel principal con borde
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -478,7 +479,7 @@ private void mostrarTicket(String mesa, String cliente, String fecha, int capaci
     JTextArea txtTicket = new JTextArea();
     txtTicket.setEditable(false);
     txtTicket.setFont(new Font("Monospaced", Font.PLAIN, 14));
-    
+    //ticket de reserva 
     StringBuilder contenido = new StringBuilder();
     contenido.append("\n          TICKET DE RESERVA          \n");
     contenido.append("==================================\n");
@@ -500,11 +501,11 @@ private void mostrarTicket(String mesa, String cliente, String fecha, int capaci
     contenido.append("¡Gracias por su preferencia!");
     
     txtTicket.setText(contenido.toString());
-    
+    //importante de ejemplo para imprimir los reportes
     // Botones
     JButton btnCerrar = new JButton("Cerrar");
     btnCerrar.addActionListener(e -> ticketDialog.dispose());
-    
+    //boton imprimir
     JButton btnImprimir = new JButton("Imprimir");
     btnImprimir.addActionListener(e -> imprimirTicket(contenido.toString()));
     
@@ -520,7 +521,7 @@ private void mostrarTicket(String mesa, String cliente, String fecha, int capaci
     ticketDialog.setLocationRelativeTo(this);
     ticketDialog.setVisible(true);
 }
-
+//acciones de imprimir 
 private void imprimirTicket(String contenido) {
     try {
         JTextArea areaImpresion = new JTextArea(contenido);
@@ -728,10 +729,10 @@ private String determinarEstadoPago(String metodoPago) {
 
         jLabel38.setFont(new java.awt.Font("Zilla Slab", 3, 48)); // NOI18N
         jLabel38.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/olla-caliente (1).png"))); // NOI18N
-        jLabel38.setText("Restaurante Panchita-Miraflores ");
+        jLabel38.setText("restaurante la lucha ");
         jLabel38.setFocusable(false);
         jLabel38.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        getContentPane().add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, 830, 90));
+        getContentPane().add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, 830, 90));
 
         btnabrirsalas.setBackground(new java.awt.Color(102, 102, 255));
         btnabrirsalas.setFont(new java.awt.Font("Microsoft New Tai Lue", 3, 12)); // NOI18N
@@ -841,7 +842,7 @@ private String determinarEstadoPago(String metodoPago) {
         });
         PanelSalas.add(btnsalasecundaria);
 
-        jPanel1.add(PanelSalas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 800, 500));
+        jPanel1.add(PanelSalas, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 800, 500));
 
         jTabbedPane1.addTab("Panel", jPanel1);
 
@@ -1598,7 +1599,7 @@ private String determinarEstadoPago(String metodoPago) {
         jLabel1.setBackground(new java.awt.Color(51, 51, 255));
         jLabel1.setForeground(new java.awt.Color(51, 51, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/imagen2 (1).png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 1280, 730));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, -10, 1280, 730));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1930,9 +1931,7 @@ JOptionPane.showMessageDialog(this, "Contraseña válida");  // TODO add your ha
     }//GEN-LAST:event_txtpassswordsActionPerformed
 
     private void botonopinionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonopinionActionPerformed
-                                                   
-
-    // Panel principal
+   // Panel principal para el JOptionPane
     JPanel panel = new JPanel();
     panel.setLayout(new GridLayout(3, 1, 10, 10));
 
@@ -1952,17 +1951,21 @@ JOptionPane.showMessageDialog(this, "Contraseña válida");  // TODO add your ha
     panel.add(rbSatisfecho);
     panel.add(rbNoSatisfecho);
 
-    // Mostrar ventana
+    // Mostrar ventana de diálogo
     int opcion = JOptionPane.showConfirmDialog(
-            this,
-            panel,
-            "Opinión del cliente",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.PLAIN_MESSAGE
+                this,
+                panel,
+                "Opinión del cliente",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
     );
 
-    // Guardar resultado
+    boolean clienteSatisfecho = false;
+
+    // --- Lógica de Guardado ---
     if (opcion == JOptionPane.OK_OPTION) {
+        
+        // 1. Determinar el estado seleccionado
         if (rbSatisfecho.isSelected()) {
             clienteSatisfecho = true;
             JOptionPane.showMessageDialog(this, "Registrado: Cliente satisfecho");
@@ -1970,19 +1973,32 @@ JOptionPane.showMessageDialog(this, "Contraseña válida");  // TODO add your ha
             clienteSatisfecho = false;
             JOptionPane.showMessageDialog(this, "Registrado: Cliente NO está satisfecho");
         } else {
+            // El usuario presionó OK sin seleccionar nada.
             JOptionPane.showMessageDialog(this, "Debes seleccionar una opción.");
+            return; // Salir del método
+        }
+
+        // 2. Definir los valores para la base de datos
         
-    }
-       
-    }
-      int estado = clienteSatisfecho ? 1 : 0;
-      
-  String sql = "INSERT INTO opiniones (estado) VALUES (?)";
+        // *** LÍNEA CLAVE MODIFICADA ***
+        // Nueva lógica: 1 = No Satisfecho, 0 = Satisfecho
+        int estado = clienteSatisfecho ? 0 : 1; 
+        
+        // 3. Obtener la fecha actual y convertirla a java.sql.Date
+        java.sql.Date fechaActualSQL = new java.sql.Date(new Date().getTime());
+        
+        // 4. Consulta SQL: Incluye 'estado' y 'fechaopinion'
+        String sql = "INSERT INTO opiniones (estado, fechaopinion) VALUES (?, ?)";
 
         try (Connection con = conex.Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, estado);
+            // Parámetro 1: Estado (0 o 1)
+            ps.setInt(1, estado); 
+            
+            // Parámetro 2: Fecha
+            ps.setDate(2, fechaActualSQL); 
+            
             ps.executeUpdate();
 
             JOptionPane.showMessageDialog(this, "Opinión guardada correctamente.");
@@ -1990,6 +2006,8 @@ JOptionPane.showMessageDialog(this, "Contraseña válida");  // TODO add your ha
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar opinión: " + ex.getMessage());
         }
+    }                                                
+
       // TODO add your handling code here:
     }//GEN-LAST:event_botonopinionActionPerformed
  

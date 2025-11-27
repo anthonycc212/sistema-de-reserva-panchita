@@ -26,10 +26,21 @@ import java.sql.ResultSet;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.sql.Connection;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.time.LocalDateTime; // Necesaria para el registro de auditoría con hora
+import java.time.format.DateTimeFormatter; // Necesaria para formatear la fecha/hora
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.math.BigDecimal;
 public class HistorialReservasDialog extends javax.swing.JDialog {
 
     private DefaultTableModel modelo;
@@ -152,7 +163,7 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
         String sql = "SELECT id, codigo_reserva, cliente, sala, mesa, fecha, hora, capacidad, metodo_pago, estado_pago FROM reservas "
                    + "WHERE cliente LIKE ? OR sala LIKE ? OR mesa LIKE ? OR fecha LIKE ? OR metodo_pago LIKE ? OR estado_pago LIKE ? "
                    + "ORDER BY fecha DESC, hora DESC";
-
+//llamada de reservas 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/baserestaurante", "root", "");
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -231,7 +242,6 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -240,16 +250,12 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
         btnFiltrar = new javax.swing.JButton();
+        btnrepeli = new javax.swing.JButton();
         btnexportar = new javax.swing.JButton();
         btncerrar = new javax.swing.JButton();
         btneliminarreserva = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         btnrepind = new javax.swing.JButton();
         impresiondereporte = new javax.swing.JButton();
-        btnrepeli = new javax.swing.JButton();
-
-        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -288,6 +294,13 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
             }
         });
 
+        btnrepeli.setText("Reporte de eliminacion de reserva");
+        btnrepeli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnrepeliActionPerformed(evt);
+            }
+        });
+
         btnexportar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/exportar.png"))); // NOI18N
         btnexportar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -304,10 +317,6 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setText("jButton2");
-
-        jButton3.setText("jButton3");
-
         btnrepind.setText("Reporte de indicadores");
         btnrepind.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -322,13 +331,6 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
             }
         });
 
-        btnrepeli.setText("Reporte de eliminacion de reserva");
-        btnrepeli.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnrepeliActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -336,84 +338,70 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(166, 166, 166)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnexportar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(67, 67, 67)
-                                .addComponent(btneliminarreserva, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(btncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(233, 233, 233)
+                        .addComponent(btnexportar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69)
+                        .addComponent(btneliminarreserva, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 849, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnrepind)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(impresiondereporte))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addComponent(btnrepeli, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(19, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 566, Short.MAX_VALUE)
-                    .addComponent(jButton2)
-                    .addGap(0, 567, Short.MAX_VALUE)))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(567, Short.MAX_VALUE)
-                    .addComponent(jButton3)
-                    .addContainerGap(566, Short.MAX_VALUE)))
+                        .addGap(75, 75, 75)
+                        .addComponent(btncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 6, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnrepind)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(impresiondereporte)
+                        .addGap(0, 19, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnrepeli)
+                        .addGap(59, 59, 59))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtBuscar)))
-                .addGap(49, 49, 49)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnexportar)
-                    .addComponent(btneliminarreserva, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btncerrar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(44, 44, 44))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtBuscar)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(31, 31, 31)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btneliminarreserva, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnexportar)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btncerrar)))
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(80, 80, 80)
+                        .addGap(9, 9, 9)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnrepind)
                             .addComponent(impresiondereporte))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnrepeli, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(27, 27, 27))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jButton2)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(278, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(294, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnrepeli)))
+                .addGap(789, 789, 789))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -421,296 +409,317 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
-        String textoBusqueda = txtBuscar.getText().trim();
-    cargarDatosReservasFiltradas(textoBusqueda);
-    }//GEN-LAST:event_btnFiltrarActionPerformed
-
-    private void btnexportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexportarActionPerformed
-         JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Guardar archivo CSV");
-    fileChooser.setSelectedFile(new File("reservas.csv"));
-    
-    int seleccion = fileChooser.showSaveDialog(this);
-    if (seleccion == JFileChooser.APPROVE_OPTION) {
-        File archivo = fileChooser.getSelectedFile();
-        if (!archivo.getName().toLowerCase().endsWith(".csv")) {
-            archivo = new File(archivo.getAbsolutePath() + ".csv");
-        }
-        exportarTablaA_CSV(tblReservas, archivo);
-    }
-    }//GEN-LAST:event_btnexportarActionPerformed
-
-    private void btneliminarreservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarreservaActionPerformed
-        int filaSeleccionada = tblReservas.getSelectedRow();
-
-    if (filaSeleccionada == -1) {
-        JOptionPane.showMessageDialog(this, "Seleccione una reserva para eliminar");
-        return;
-    }
-
-    int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar la reserva seleccionada?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-
-    if (confirmacion == JOptionPane.YES_OPTION) {
-        // Obtener el ID de la reserva (columna 0)
-        int idReserva = (int) tblReservas.getValueAt(filaSeleccionada, 0);
-
-        // Sentencia SQL para eliminar
-        String sql = "DELETE FROM reservas WHERE id = ?";
-
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/baserestaurante", "root", "");
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, idReserva);
-
-            int resultado = ps.executeUpdate();
-
-            if (resultado > 0) {
-                JOptionPane.showMessageDialog(this, "Reserva eliminada correctamente");
-                cargarDatosReservas(); // Método que recarga la tabla
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo eliminar la reserva");
+    private void impresiondereporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_impresiondereporteActionPerformed
+        try (Connection con = Conexion.getConexion()) {
+            if (con == null) {
+                JOptionPane.showMessageDialog(this, "No se pudo conectar a la base de datos.");
+                return;
             }
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al eliminar la reserva: " + e.getMessage());
-        }
-    }
-
-    }//GEN-LAST:event_btneliminarreservaActionPerformed
-
-    private void btnrepindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrepindActionPerformed
-
-  try (Connection con = conex.Conexion.getConexion()) {
-
-        Statement st = con.createStatement();
-
-        // --- 1. Nivel de mesas ocupadas ---
-        String sqlMesas = "SELECT COUNT(*) AS ocupadas FROM reservas";
-        ResultSet rs = st.executeQuery(sqlMesas);
-        int mesasOcupadas = 0;
-        if (rs.next()) {
-            mesasOcupadas = rs.getInt("ocupadas");
-        }
-
-        String sqlTotalMesas = "SELECT COUNT(*) AS total FROM salas";
-        rs = st.executeQuery(sqlTotalMesas);
-        int totalMesas = 1; // evitar división por cero
-        if (rs.next()) {
-            totalMesas = rs.getInt("total");
-        }
-        double nivelMesas = ((double) mesasOcupadas / totalMesas) * 100;
-
-        // --- 2. Índice de satisfacción ---
-        String sqlSatis = "SELECT estado FROM opiniones";
-        rs = st.executeQuery(sqlSatis);
-        int totalOpiniones = 0;
-        int satisfechos = 0;
-        int minSatis = 1; 
-        int maxSatis = 0;
-        double sumaSatis = 0;
-
-        while (rs.next()) {
-            int estado = rs.getInt("estado"); // 1 = satisfecho, 0 = no satisfecho
-            totalOpiniones++;
-            sumaSatis += estado;
-            if (estado < minSatis) minSatis = estado;
-            if (estado > maxSatis) maxSatis = estado;
-            if (estado == 1) satisfechos++;
-        }
-
-        double indiceSatisfaccion = (totalOpiniones > 0) ? ((double) satisfechos / totalOpiniones) * 100 : 0;
-        double promSatis = (totalOpiniones > 0) ? (sumaSatis / totalOpiniones) * 100 : 0;
-
-        // --- 3. Rotación de clientes ---
-        String sqlRot = "SELECT COUNT(*) AS reservas FROM reservas";
-        rs = st.executeQuery(sqlRot);
-        int rotacion = 0;
-        if (rs.next()) {
-            rotacion = rs.getInt("reservas");
-        }
-        int minRot = rotacion; 
-        int maxRot = rotacion;
-        double promRot = rotacion;
-
-        // --- 4. Productividad ---
-        String sqlAdmins = "SELECT COUNT(*) AS admins FROM usuarios WHERE rol = 'admin'";
-        rs = st.executeQuery(sqlAdmins);
-        int numAdmins = 1; // evitar división por cero
-        if (rs.next()) {
-            numAdmins = rs.getInt("admins");
-            if (numAdmins == 0) numAdmins = 1; 
-        }
-        double productividad = (double) rotacion / numAdmins;
-        double minProd = productividad; 
-        double maxProd = productividad;
-        double promProd = productividad;
-
-        // --- Construir mensaje separado ---
-        String mensaje = String.format(
-            "=== Indicadores del día ===\n\n" +
-            "Nivel de mesas ocupadas: %.2f%%\n" +
-            "Índice de satisfacción: %.2f%%\n" +
-            "Rotación de clientes: %d\n" +
-            "Productividad: %.2f reservas por admin\n\n" +
-            "=== Estadísticas (Min, Max, Prom) ===\n\n" +
-            "Nivel de mesas ocupadas: %.2f%%, %.2f%%, %.2f%%\n" +
-            "Índice de satisfacción: %d%%, %d%%, %.2f%%\n" +
-            "Rotación de clientes: %d, %d, %.2f\n" +
-            "Productividad: %.2f, %.2f, %.2f",
-            nivelMesas,
-            indiceSatisfaccion,
-            rotacion,
-            productividad,
-            // estadísticas
-            nivelMesas, nivelMesas, nivelMesas,
-            minSatis * 100, maxSatis * 100, promSatis,
-            minRot, maxRot, promRot,
-            minProd, maxProd, promProd
-        );
-
-        JOptionPane.showMessageDialog(this, mensaje);
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al generar indicadores: " + e.getMessage());
-    }
-  
-    }//GEN-LAST:event_btnrepindActionPerformed
-
-    private void impresiondereporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_impresiondereporteActionPerformed
-         try (Connection con = Conexion.getConexion()) {
-        if (con == null) {
-            JOptionPane.showMessageDialog(this, "No se pudo conectar a la base de datos.");
-            return;
-        }
-
-        // Elegir tipo de reporte
-        String[] opciones = {"Normal", "Estadístico"};
-        int seleccionReporte = JOptionPane.showOptionDialog(this, 
-                "Seleccione el tipo de reporte a generar:", 
-                "Generar PDF", 
-                JOptionPane.DEFAULT_OPTION, 
-                JOptionPane.QUESTION_MESSAGE, 
-                null, 
-                opciones, 
+            // Elegir tipo de reporte
+            String[] opciones = {"Normal", "Estadístico"};
+            int seleccionReporte = JOptionPane.showOptionDialog(this,
+                "Seleccione el tipo de reporte a generar:",
+                "Generar PDF",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
                 opciones[0]);
 
-        if (seleccionReporte == JOptionPane.CLOSED_OPTION) return;
+            if (seleccionReporte == JOptionPane.CLOSED_OPTION) return;
 
-        // Elegir archivo
-        JFileChooser fileChooser = new JFileChooser();
-        int seleccionArchivo = fileChooser.showSaveDialog(this);
-        if (seleccionArchivo != JFileChooser.APPROVE_OPTION) return;
+            // Elegir archivo
+            JFileChooser fileChooser = new JFileChooser();
+            int seleccionArchivo = fileChooser.showSaveDialog(this);
+            if (seleccionArchivo != JFileChooser.APPROVE_OPTION) return;
 
-        File archivo = fileChooser.getSelectedFile();
-        if (!archivo.getName().toLowerCase().endsWith(".pdf")) {
-            archivo = new File(archivo.getAbsolutePath() + ".pdf");
-        }
-        archivo.getParentFile().mkdirs();
-
-        // Crear PDF
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(archivo));
-        document.open();
-        document.add(new Paragraph("Reporte de Indicadores"));
-        document.add(new Paragraph("\n"));
-
-        Statement st = con.createStatement();
-
-        if (seleccionReporte == 0) { // Normal
-            ResultSet rs = st.executeQuery("SELECT COUNT(*) AS total_reservas FROM reservas");
-            int totalReservas = rs.next() ? rs.getInt("total_reservas") : 0;
-
-            document.add(new Paragraph("Total de reservas: " + totalReservas));
-
-        } else { // Estadístico
-            ResultSet rs = st.executeQuery("SELECT COUNT(*) AS total_reservas, SUM(precio) AS total_precio FROM reservas");
-            if (rs.next()) {
-                int total = rs.getInt("total_reservas");
-                double totalPrecio = rs.getDouble("total_precio");
-                document.add(new Paragraph("Total de reservas: " + total));
-                document.add(new Paragraph("Total recaudado: S/. " + totalPrecio));
+            File archivo = fileChooser.getSelectedFile();
+            if (!archivo.getName().toLowerCase().endsWith(".pdf")) {
+                archivo = new File(archivo.getAbsolutePath() + ".pdf");
             }
+            archivo.getParentFile().mkdirs();
+
+            // Crear PDF
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(archivo));
+            document.open();
+            document.add(new Paragraph("Reporte de Indicadores"));
+            document.add(new Paragraph("\n"));
+
+            Statement st = con.createStatement();
+
+            if (seleccionReporte == 0) { // Normal
+                ResultSet rs = st.executeQuery("SELECT COUNT(*) AS total_reservas FROM reservas");
+                int totalReservas = rs.next() ? rs.getInt("total_reservas") : 0;
+
+                document.add(new Paragraph("Total de reservas: " + totalReservas));
+
+            } else { // Estadístico
+                ResultSet rs = st.executeQuery("SELECT COUNT(*) AS total_reservas, SUM(precio) AS total_precio FROM reservas");
+                if (rs.next()) {
+                    int total = rs.getInt("total_reservas");
+                    double totalPrecio = rs.getDouble("total_precio");
+                    document.add(new Paragraph("Total de reservas: " + total));
+                    document.add(new Paragraph("Total recaudado: S/. " + totalPrecio));
+                }
+            }
+
+            document.close();
+            JOptionPane.showMessageDialog(this, "PDF generado correctamente en: " + archivo.getAbsolutePath());
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al generar PDF: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        document.close();
-        JOptionPane.showMessageDialog(this, "PDF generado correctamente en: " + archivo.getAbsolutePath());
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al generar PDF: " + e.getMessage());
-        e.printStackTrace();
-    }
- // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_impresiondereporteActionPerformed
 
-    private void btnrepeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrepeliActionPerformed
-      int filaSeleccionada = tblReservas.getSelectedRow();
+    private void btnrepindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrepindActionPerformed
+// --- 1. CALCULAR EL RANGO DE FECHAS (Usando java.time.LocalDate) ---
+    
+    java.time.LocalDate fechaFin = java.time.LocalDate.now();
+    java.time.LocalDate fechaInicio = fechaFin.minusDays(6); 
+    
+    java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    String strFechaInicio = fechaInicio.format(formatter);
+    String strFechaFin = fechaFin.format(formatter);
+    
+    // Variables de conteo
+    int reservasRealizadas = 0; 
+    int clientesAtendidos = 0; // SUM(capacidad)
+    int satisfechos = 0;
+    int insatisfechos = 0;
+    
+    // --- 2. CONEXIÓN Y EJECUCIÓN DE CONSULTAS ---
+    
+    try (java.sql.Connection con = conex.Conexion.getConexion()) {
+        
+        // --- CONSULTA 1: RESERVAS, MESAS Y CLIENTES (Tabla 'reservas') ---
+        String sqlReservas = "SELECT COUNT(*) AS total_reservas, SUM(capacidad) AS total_clientes FROM reservas WHERE fecha BETWEEN ? AND ?"; 
+        try (java.sql.PreparedStatement ps = con.prepareStatement(sqlReservas)) {
+            ps.setString(1, strFechaInicio);
+            ps.setString(2, strFechaFin);
+            
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    reservasRealizadas = rs.getInt("total_reservas");
+                    clientesAtendidos = rs.getInt("total_clientes"); 
+                }
+            }
+        }
+        
+        // --- CONSULTA 2: OPINIONES SATISFECHAS (estado = 0, Satisfecho) ---
+        String sqlSatisfechos = "SELECT COUNT(*) AS total FROM opiniones WHERE estado = 0 AND fechaopinion BETWEEN ? AND ?"; 
+        try (java.sql.PreparedStatement ps = con.prepareStatement(sqlSatisfechos)) {
+            ps.setString(1, strFechaInicio);
+            ps.setString(2, strFechaFin);
+            
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    satisfechos = rs.getInt("total");
+                }
+            }
+        }
+        
+        // --- CONSULTA 3: OPINIONES INSATISFECHAS (estado = 1, Insatisfecho) ---
+        String sqlInsatisfechos = "SELECT COUNT(*) AS total FROM opiniones WHERE estado = 1 AND fechaopinion BETWEEN ? AND ?"; 
+        try (java.sql.PreparedStatement ps = con.prepareStatement(sqlInsatisfechos)) {
+            ps.setString(1, strFechaInicio);
+            ps.setString(2, strFechaFin);
+            
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    insatisfechos = rs.getInt("total");
+                }
+            }
+        }
+        
+        // --- 3. MOSTRAR RESULTADO (FINAL) ---
+        String mensaje = String.format(
+            "--- Reporte Semanal Consolidado ---\n" +
+            "Período: %s al %s\n\n" +
+            
+            " Clientes Atendidos en la Semana: %d\n" +
+            "️ Mesas ocupadas en la semana: %d\n" + // ¡REINCORPORADO!
+            " Reservas totales en la semana: %d\n\n" +
+            
+            " Clientes Satisfechos (estado 0): %d\n" +
+            "? Clientes Insatisfechos (estado 1): %d",
+            
+            strFechaInicio,
+            strFechaFin,
+            clientesAtendidos, 
+            reservasRealizadas, // Mesas ocupadas
+            reservasRealizadas, // Reservas totales
+            satisfechos,
+            insatisfechos
+        );
+        
+        javax.swing.JOptionPane.showMessageDialog(null, mensaje, "Reporte Semanal", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(null, "Error al generar el reporte semanal: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnrepindActionPerformed
+
+    private void btneliminarreservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarreservaActionPerformed
+      // --- 1. OBTENER FILA Y VALIDAR ---
+    int filaSeleccionada = tblReservas.getSelectedRow();
+
     if (filaSeleccionada == -1) {
         JOptionPane.showMessageDialog(this, "Seleccione una reserva para eliminar");
         return;
     }
 
-    int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar esta reserva?", "Confirmar", JOptionPane.YES_NO_OPTION);
-    if (confirmar != JOptionPane.YES_OPTION) {
-        return;
-    }
+    int confirmacion = JOptionPane.showConfirmDialog(this, 
+            "¿Está seguro de eliminar la reserva seleccionada? Se registrará en el historial.", 
+            "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/baserestaurante", "root", "")) {
-
-        // --- 1. Leer datos de la fila ---
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        
+        // --- 2. PREPARACIÓN DE DATOS Y SQL ---
         int idReserva = (int) tblReservas.getValueAt(filaSeleccionada, 0);
-        String codigoReserva = (String) tblReservas.getValueAt(filaSeleccionada, 1);
-        String cliente = (String) tblReservas.getValueAt(filaSeleccionada, 2);
-        String sala = (String) tblReservas.getValueAt(filaSeleccionada, 3);
-        int mesa = (int) tblReservas.getValueAt(filaSeleccionada, 4);
-        Date fecha = (Date) tblReservas.getValueAt(filaSeleccionada, 5);
-        Time hora = (Time) tblReservas.getValueAt(filaSeleccionada, 6);
-        int capacidad = (int) tblReservas.getValueAt(filaSeleccionada, 7);
-        String metodoPago = (String) tblReservas.getValueAt(filaSeleccionada, 8);
-        String estadoPago = (String) tblReservas.getValueAt(filaSeleccionada, 9);
-        int estacionamiento = (int) tblReservas.getValueAt(filaSeleccionada, 10);
-        BigDecimal precio = (BigDecimal) tblReservas.getValueAt(filaSeleccionada, 11);
-        Timestamp fechaEliminacion = new Timestamp(System.currentTimeMillis());
+        
+        // Variables para almacenar los datos (SOLUCIÓN al error de ResultSet closed)
+        String mesa = null;
+        java.sql.Date fecha = null;
+        java.sql.Time hora = null;
+        String cliente = null;
+        int capacidad = 0;
+        String sala = null;
+        String codigoReserva = null;
+        String metodoPago = null;
+        String estadoPago = null;
+        int estacionamiento = 0;
+        java.math.BigDecimal precio = null;
+        
+        // Dato de Auditoría (solo fecha)
+        String fechaEliminacion = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        // --- 2. Insertar en reservas_eliminadas ---
-        String sqlInsert = "INSERT INTO reservas_eliminadas "
-                + "(id, codigo_reserva, cliente, sala, mesa, fecha, hora, capacidad, metodo_pago, estado_pago, estacionamiento, precio, fecha_eliminacion) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert)) {
-            psInsert.setInt(1, idReserva);
-            psInsert.setString(2, codigoReserva);
-            psInsert.setString(3, cliente);
-            psInsert.setString(4, sala);
-            psInsert.setInt(5, mesa);
-            psInsert.setDate(6, fecha);
-            psInsert.setTime(7, hora);
-            psInsert.setInt(8, capacidad);
-            psInsert.setString(9, metodoPago);
-            psInsert.setString(10, estadoPago);
-            psInsert.setInt(11, estacionamiento);
-            psInsert.setBigDecimal(12, precio);
-            psInsert.setTimestamp(13, fechaEliminacion);
+        // Consultas SQL
+        String sqlSelect = "SELECT * FROM reservas WHERE id = ?"; 
+        // 13 columnas en total para el INSERT (sin 'usuario_eliminacion')
+        String sqlInsertEliminadas = "INSERT INTO reservas_eliminadas (id, mesa, fecha, hora, cliente, capacidad, sala, codigo_reserva, metodo_pago, estado_pago, estacionamiento, Precio, fecha_eliminacion) "
+                                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; 
+        String sqlDelete = "DELETE FROM reservas WHERE id = ?"; 
+        
+        Connection con = null;
 
-            psInsert.executeUpdate();
+        try {
+            con = conex.Conexion.getConexion();
+            con.setAutoCommit(false); // Inicia Transacción
+            
+            // --- 3. PASO 1: SELECCIONAR Y ALMACENAR DATOS ---
+            try (java.sql.PreparedStatement psSelect = con.prepareStatement(sqlSelect)) {
+                psSelect.setInt(1, idReserva);
+                try (java.sql.ResultSet rs = psSelect.executeQuery()) {
+                    
+                    if (!rs.next()) {
+                        JOptionPane.showMessageDialog(null, "Error: Reserva no encontrada (ID: " + idReserva + ").");
+                        con.setAutoCommit(true); 
+                        return;
+                    }
+
+                    // Lectura de los 12 campos de la reserva
+                    mesa = rs.getString("mesa");
+                    fecha = rs.getDate("fecha");
+                    hora = rs.getTime("hora");
+                    cliente = rs.getString("cliente");
+                    capacidad = rs.getInt("capacidad");
+                    sala = rs.getString("sala");
+                    codigoReserva = rs.getString("codigo_reserva");
+                    metodoPago = rs.getString("metodo_pago");
+                    estadoPago = rs.getString("estado_pago");
+                    estacionamiento = rs.getInt("estacionamiento");
+                    precio = rs.getBigDecimal("Precio"); 
+                }
+            }
+            
+            // --- 4. PASO 2: INSERTAR EN EL HISTORIAL (13 Parámetros) ---
+            try (java.sql.PreparedStatement psInsert = con.prepareStatement(sqlInsertEliminadas)) {
+                
+                // 12 parámetros de la reserva
+                psInsert.setInt(1, idReserva); 
+                psInsert.setString(2, mesa); // Ahora inserta la cadena de texto
+                psInsert.setDate(3, fecha);
+                psInsert.setTime(4, hora);
+                psInsert.setString(5, cliente);
+                psInsert.setInt(6, capacidad);
+                psInsert.setString(7, sala);
+                psInsert.setString(8, codigoReserva);
+                psInsert.setString(9, metodoPago);
+                psInsert.setString(10, estadoPago);
+                psInsert.setInt(11, estacionamiento);
+                psInsert.setBigDecimal(12, precio); 
+                
+                // 1 parámetro de auditoría
+                psInsert.setString(13, fechaEliminacion); 
+                
+                psInsert.executeUpdate();
+            }
+            
+            // --- 5. PASO 3: ELIMINAR DE LA TABLA ORIGINAL ---
+            try (java.sql.PreparedStatement psDelete = con.prepareStatement(sqlDelete)) {
+                psDelete.setInt(1, idReserva); 
+                psDelete.executeUpdate();
+            }
+            
+            // --- 6. PASO 4: CONFIRMAR TRANSACCIÓN Y ACTUALIZAR ---
+            con.commit(); 
+            JOptionPane.showMessageDialog(null, "Reserva eliminada y registrada en historial correctamente.", "Eliminación Exitosa", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Asegúrate de tener este método en tu clase para recargar la tabla:
+            cargarDatosReservas(); 
+            
+        } catch (java.sql.SQLException e) {
+            // --- 7. PASO 5: DESHACER TRANSACCIÓN en caso de error ---
+            try {
+                if (con != null) {
+                    con.rollback(); 
+                }
+            } catch (java.sql.SQLException ex) {
+                System.err.println("Error al realizar rollback: " + ex.getMessage());
+            }
+            JOptionPane.showMessageDialog(null, "Error SQL: La reserva no pudo ser eliminada o registrada.\n" + e.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error SQL: " + e.getMessage());
+            
+        } finally {
+            try {
+                if (con != null) {
+                    con.setAutoCommit(true); 
+                    con.close();
+                }
+            } catch (java.sql.SQLException ex) {
+                System.err.println("Error al cerrar conexión: " + ex.getMessage());
+            }
         }
+    }
+    }//GEN-LAST:event_btneliminarreservaActionPerformed
 
-        // --- 3. Borrar de la tabla principal ---
-        String sqlDelete = "DELETE FROM reservas WHERE id = ?";
-        try (PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
-            psDelete.setInt(1, idReserva);
-            psDelete.executeUpdate();
+    private void btnexportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexportarActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar archivo CSV");
+        fileChooser.setSelectedFile(new File("reservas.csv"));
+
+        int seleccion = fileChooser.showSaveDialog(this);
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
+            if (!archivo.getName().toLowerCase().endsWith(".csv")) {
+                archivo = new File(archivo.getAbsolutePath() + ".csv");
+            }
+            exportarTablaA_CSV(tblReservas, archivo);
         }
+    }//GEN-LAST:event_btnexportarActionPerformed
 
-        JOptionPane.showMessageDialog(this, "Reserva eliminada correctamente");
-
-        // --- 4. Refrescar JTable ---
-        cargarReservas(); // asegúrate de tener un método que recargue la tabla
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al eliminar la reserva: " + ex.getMessage());
-    } // TODO add your handling code here:
+    private void btnrepeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrepeliActionPerformed
+  // TODO add your handling code here:
     }//GEN-LAST:event_btnrepeliActionPerformed
+
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        String textoBusqueda = txtBuscar.getText().trim();
+        cargarDatosReservasFiltradas(textoBusqueda);
+    }//GEN-LAST:event_btnFiltrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -762,9 +771,6 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnrepeli;
     private javax.swing.JButton btnrepind;
     private javax.swing.JButton impresiondereporte;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
