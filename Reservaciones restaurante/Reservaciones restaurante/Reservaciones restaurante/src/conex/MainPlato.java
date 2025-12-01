@@ -1,37 +1,32 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package conex;
 
-/**
- *
- * @author antho
- */
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-public class MainPlato extends JFrame {
+// Ahora extiende JPanel para poder insertarse en una pestaña
+public class MainPlato extends JPanel {
 
     private DefaultListModel<String> listaPlatosModel;
     private JList<String> listaPlatos;
     private JTextField campoNombre, campoDescripcion, campoPrecio;
     private PlatosDao dao;
 
+    // El constructor ya no es un JFrame.
     public MainPlato() {
-        super("Gestor de Platos (Lista Enlazada + BD)");
         dao = new PlatosDao();
+
+        // 💡 PRUEBA VISUAL: Cambia el fondo a amarillo. Si ves este color, el panel SÍ está cargando.
+        setBackground(new Color(255, 255, 153));
 
         setLayout(new BorderLayout());
 
-        listaPlatosModel = new DefaultListModel<>();
-        listaPlatos = new JList<>(listaPlatosModel);
-        JScrollPane scrollPane = new JScrollPane(listaPlatos);
-        add(scrollPane, BorderLayout.CENTER);
+      //  listaPlatosModel = new DefaultListModel<>();
+       // listaPlatos = new JList<>(listaPlatosModel);
+       // JScrollPane scrollPane = new JScrollPane(listaPlatos);
+        //add(scrollPane, BorderLayout.CENTER);
 
-        JPanel panelIngreso = new JPanel(new GridLayout(6, 2)); // Se ajusta para 6 filas
+        JPanel panelIngreso = new JPanel(new GridLayout(6, 2));
         campoNombre = new JTextField();
         campoDescripcion = new JTextField();
         campoPrecio = new JTextField();
@@ -46,7 +41,7 @@ public class MainPlato extends JFrame {
         JButton btnAgregar = new JButton("Agregar Plato");
         JButton btnEliminar = new JButton("Eliminar Seleccionado");
         JButton btnGuardarBD = new JButton("Guardar en BD");
-        JButton btnCargarBD = new JButton("Cargar desde BD");
+        JButton btnCargarBD = new JButton("Cargar desde BD (Manual)");
 
         panelIngreso.add(btnAgregar);
         panelIngreso.add(btnEliminar);
@@ -55,7 +50,7 @@ public class MainPlato extends JFrame {
 
         add(panelIngreso, BorderLayout.SOUTH);
 
-        // Acción: Agregar plato a la lista
+        // Acción: Agregar plato a la lista (en memoria)
         btnAgregar.addActionListener(e -> {
             String nombre = campoNombre.getText();
             String descripcion = campoDescripcion.getText();
@@ -67,15 +62,16 @@ public class MainPlato extends JFrame {
                 return;
             }
 
+            // Asumiendo que la clase Platos existe
             Platos plato = new Platos(dao.listarPlatos().size() + 1, nombre, descripcion, precio);
             dao.agregarPlato(plato);
-          listaPlatosModel.addElement(nombre + " - " + descripcion + " - $" + precio);
+            listaPlatosModel.addElement(nombre + " - " + descripcion + " - S/ " + String.format("%.2f", precio));
             campoNombre.setText("");
             campoDescripcion.setText("");
             campoPrecio.setText("");
         });
 
-        // Acción: Eliminar plato seleccionado
+        // Acción: Eliminar plato seleccionado (en memoria)
         btnEliminar.addActionListener(e -> {
             int selectedIndex = listaPlatos.getSelectedIndex();
             if (selectedIndex != -1) {
@@ -86,39 +82,42 @@ public class MainPlato extends JFrame {
             }
         });
 
-        // Acción: Guardar todos los platos en la base de datos
+        // Acción: Guardar todos los platos de la lista en la BD
         btnGuardarBD.addActionListener(e -> {
             dao.guardarEnBD(dao.listarPlatos());
             JOptionPane.showMessageDialog(this, "Platos guardados en la base de datos.");
         });
 
-        // Acción: Cargar platos desde la base de datos
+        // Acción: Cargar platos desde la BD (Manual)
         btnCargarBD.addActionListener(e -> {
-            listaPlatosModel.clear();
-            List<Platos> platos = dao.cargarDesdeBD();
-            for (Platos p : platos) {
-                dao.agregarPlato(p);
-         listaPlatosModel.addElement(p.getNombre() + " - " + p.getDescripcion() + " - $" + p.getPrecio());
-            }
+            cargarPlatos(dao);
             JOptionPane.showMessageDialog(this, "Datos cargados desde la base de datos.");
         });
 
-        setSize(450, 400);
-      setLocationRelativeTo(null); 
-setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-setVisible(true);
+        // 💡 CARGA AUTOMÁTICA: Llama al método de carga justo al terminar de configurar el panel.
+        cargarPlatos(dao);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Main());
+    /**
+     * Método central para cargar la lista y sincronizar el DAO.
+     */
+    private void cargarPlatos(PlatosDao dao) {
+        listaPlatosModel.clear();
+
+        // Asumiendo que PlatosDao tiene un método clearPlatos() (como en la solución anterior)
+        dao.clearPlatos();
+
+        List<Platos> platos = dao.cargarDesdeBD();
+
+        if (platos.isEmpty()) {
+            // Mensaje si no hay datos en la BD
+            listaPlatosModel.addElement("--- La base de datos no tiene platos registrados ---");
+        } else {
+            for (Platos p : platos) {
+                // Se agrega a la lista interna del DAO y al modelo visual
+                dao.agregarPlato(p);
+                listaPlatosModel.addElement(p.getNombre() + " - " + p.getDescripcion() + " - S/ " + String.format("%.2f", p.getPrecio()));
+            }
+        }
     }
 }
-/**
- *
- * @author USER
- */
-
-/**
- *
- * @author USER
- */

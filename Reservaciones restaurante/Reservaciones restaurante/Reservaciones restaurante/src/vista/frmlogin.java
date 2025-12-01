@@ -1,4 +1,3 @@
-
 package vista;
 
 import conex.login;
@@ -16,20 +15,24 @@ public class frmlogin extends javax.swing.JFrame {
     loginDao login = new loginDao();
     private Timer tiempo;
     int contador;
-    int segundos = 30;
+    int segundos = 30; // Esta variable no se utiliza en el código actual
 
     // Constructor de la clase
     public frmlogin() {
-        initComponents(); // Este método es generado automáticamente por NetBeans
+        initComponents();
         this.setLocationRelativeTo(null);
+
+        // Credenciales predeterminadas para prueba
         txtCorreo.setText("admin@restaurante.com");
-        txtPass.setText("Admin123-");
+        txtPass.setText("Admin123");
+
         barra.setVisible(false);
+        // Carga del icono de la ventana
         ImageIcon img = new ImageIcon(getClass().getResource("/imagenes/user.png"));
         this.setIconImage(img.getImage());
     }
 
-    // Barra de progreso que simula la carga de la aplicación
+    // Clase interna para manejar la barra de progreso
     public class BarraProgreso implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -39,7 +42,7 @@ public class frmlogin extends javax.swing.JFrame {
                 tiempo.stop();
                 if (barra.getValue() == 100) {
                     // Redirige a la pantalla principal
-                    frmsistema sis = new frmsistema(lg); // Pasa el objeto 'lg'
+                    frmsistema sis = new frmsistema(lg);
                     sis.setVisible(true);
                     dispose();
                 }
@@ -48,35 +51,33 @@ public class frmlogin extends javax.swing.JFrame {
     }
 
     // Método para validar las credenciales de login
-   public void validarPorCorreo() {
-    String correo = txtCorreo.getText();
-    String pass = String.valueOf(txtPass.getPassword());
+    public void validarPorCorreo() {
+        String correo = txtCorreo.getText();
+        String pass = String.valueOf(txtPass.getPassword());
 
-    if (!correo.isEmpty() && !pass.isEmpty()) {
-        lg = login.logPorCorreo(correo, pass);  // Llamamos al nuevo método para validar por correo
+        if (!correo.isEmpty() && !pass.isEmpty()) {
+            lg = login.logPorCorreo(correo, pass);
 
-        if (lg != null) {
-            barra.setVisible(true);
-            contador = -1;
-            barra.setValue(0);
-            barra.setStringPainted(true);
+            if (lg != null) {
+                // Inicio de la barra de progreso y el temporizador
+                barra.setVisible(true);
+                contador = -1;
+                barra.setValue(0);
+                barra.setStringPainted(true);
 
-            if (tiempo != null && tiempo.isRunning()) {
-                tiempo.stop();
+                if (tiempo != null && tiempo.isRunning()) {
+                    tiempo.stop();
+                }
+
+                tiempo = new Timer(50, new BarraProgreso());
+                tiempo.start();
+            } else {
+                JOptionPane.showMessageDialog(null, "Correo o la Contraseña incorrecta");
             }
-
-            tiempo = new Timer(50, new BarraProgreso());
-            tiempo.start();
         } else {
-            JOptionPane.showMessageDialog(null, "Correo o la Contraseña incorrecta");
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese correo y contraseña.");
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Por favor, ingrese correo y contraseña.");
     }
-}
-
-
-
 
 
     /**
@@ -118,46 +119,63 @@ public class frmlogin extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        // Ajuste 1: Panel de encabezado ocupa todo el ancho
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 460, 150));
 
+        // Ajuste 2: Botón de registro centrado bajo el header
+        jButton1.setText("Registrarse");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, 100, -1));
+
+        // Ajuste 3: Barra de progreso centrada, posición y tamaño revisados
         barra.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(barra, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 230, 30));
+        jPanel1.add(barra, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 240, 25));
 
+        // Ajuste 4: Etiqueta Correo
         jLabel3.setFont(new java.awt.Font("Segoe UI Semibold", 2, 18)); // NOI18N
         jLabel3.setText("Correo electronico");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 160, 30));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Historic", 3, 18)); // NOI18N
-        jLabel4.setText("Password");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 150, -1));
-
+        // Ajuste 5: Campo Correo (ajustar Y y ancho)
         txtCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCorreoActionPerformed(evt);
             }
         });
-        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 180, 30));
-        jPanel1.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 370, 180, 30));
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, 220, 30));
 
+        // Ajuste 6: Etiqueta Password (mover hacia arriba para dar espacio)
+        jLabel4.setFont(new java.awt.Font("Segoe UI Historic", 3, 18)); // NOI18N
+        jLabel4.setText("Password");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 150, 30)); // Altura 30
+
+        // Ajuste 7: Campo Password (ajustar Y y ancho)
+        jPanel1.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 330, 220, 30));
+
+        // Ajuste 8: Botón Iniciar (alinear mejor)
         btnIniciar.setBackground(new java.awt.Color(0, 0, 0));
         btnIniciar.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
         btnIniciar.setForeground(new java.awt.Color(255, 255, 255));
@@ -168,8 +186,9 @@ public class frmlogin extends javax.swing.JFrame {
                 btnIniciarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 450, 93, 35));
+        jPanel1.add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 430, 100, 35)); // Nuevo X=80, Y=430, Ancho=100
 
+        // Ajuste 9: Botón Salir (alinear con Iniciar)
         btnsalir.setBackground(new java.awt.Color(204, 0, 0));
         btnsalir.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
         btnsalir.setForeground(new java.awt.Color(255, 255, 255));
@@ -179,15 +198,7 @@ public class frmlogin extends javax.swing.JFrame {
                 btnsalirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnsalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 450, 93, 35));
-
-        jButton1.setText("Registrarse");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, -1, -1));
+        jPanel1.add(btnsalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 430, 100, 35)); // Nuevo X=280, Y=430, Ancho=100
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 460, 530));
 
@@ -208,9 +219,9 @@ public class frmlogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnsalirActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
- RegistroUsuario newframe = new RegistroUsuario();
-newframe.setVisible(true);
-this.dispose();// TODO add your handling code here:
+        RegistroUsuario newframe = new RegistroUsuario();
+        newframe.setVisible(true);
+        this.dispose();// TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -220,7 +231,7 @@ this.dispose();// TODO add your handling code here:
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

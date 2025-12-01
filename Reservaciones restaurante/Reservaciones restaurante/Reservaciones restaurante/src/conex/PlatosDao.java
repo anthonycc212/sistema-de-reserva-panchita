@@ -16,6 +16,10 @@ public class PlatosDao {
 
     private List<Platos> lista = new LinkedList<>();
 
+    // Constructor vacío
+    public PlatosDao() {
+    }
+
     // Método 1: Agregar a la lista en memoria
     public void agregarPlato(Platos p) {
         lista.add(p);
@@ -26,15 +30,23 @@ public class PlatosDao {
         return lista;
     }
 
-    // Método 3: Eliminar por índice de la lista
+    // Método 3: Eliminar por índice de la lista en memoria
     public void eliminarPlato(int index) {
         if (index >= 0 && index < lista.size()) {
             lista.remove(index);
         }
     }
 
+    // Método Adicional: Limpiar la lista en memoria
+    public void clearPlatos() {
+        lista.clear();
+    }
+
     // 🟢 MÉTODO 4: Guardar todos los platos de la lista en la base de datos
+    // NOTA: Este método está diseñado para inserción masiva. Si el plato ya existe en BD,
+    // esto generará duplicados a menos que la tabla 'platos' tenga una restricción UNIQUE.
     public void guardarEnBD(List<Platos> lista) {
+        // Asumiendo que 'tipo' siempre es "General" y que la tabla tiene 4 columnas: id, plato, descripcion, precio, tipo
         String sql = "INSERT INTO platos (plato, descripcion, precio, tipo) VALUES (?, ?, ?, ?)";
         try (Connection con = new Conexion().getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -52,16 +64,20 @@ public class PlatosDao {
         }
     }
 
-
+    // 🟡 MÉTODO 5: Cargar platos desde la base de datos
+    // 💡 IMPORTANTE: Ahora cargamos el ID para futuras operaciones de modificación/eliminación.
     public List<Platos> cargarDesdeBD() {
         List<Platos> platos = new LinkedList<>();
-        String sql = "SELECT * FROM platos";
+        // 💡 Seleccionamos el ID del plato
+        String sql = "SELECT id, plato, descripcion, precio FROM platos";
         try (Connection con = new Conexion().getConexion();
              Statement st = con.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 Platos p = new Platos();
+                // 💡 Asignamos el ID
+                p.setId(rs.getInt("id"));
                 p.setNombre(rs.getString("plato"));
                 p.setDescripcion(rs.getString("descripcion"));
                 p.setPrecio(rs.getDouble("precio"));
