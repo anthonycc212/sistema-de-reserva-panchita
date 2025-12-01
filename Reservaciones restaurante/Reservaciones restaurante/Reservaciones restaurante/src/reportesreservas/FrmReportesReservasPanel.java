@@ -14,6 +14,13 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.BaseColor;
 import java.io.FileOutputStream;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.awt.Desktop;
 public class FrmReportesReservasPanel extends JFrame {
     private JTextField txtId, txtCliente, txtFecha, txtHora, txtMesa, txtCapacidad, txtSala, txtCodigo, txtMetodoPago, txtEstadoPago, txtEstacionamiento;
     private JTextField txtFechaInicio, txtFechaFin;
@@ -82,6 +89,10 @@ public class FrmReportesReservasPanel extends JFrame {
        JButton btnExportar = new JButton("Exportar a PDF");
 btnExportar.setBounds(btnX, btnY + 7 * btnEspaciado, btnAncho, btnAltura);
 panelIzquierdo.add(btnExportar);
+JButton btnReporte = new JButton("Generar Reporte");
+btnReporte.setBounds(btnX, btnY + 8 * btnEspaciado, btnAncho, btnAltura);
+panelIzquierdo.add(btnReporte);
+btnReporte.addActionListener(e -> generarReportePDF());
 
 btnExportar.addActionListener(e -> exportarTablaAPDF());
 
@@ -137,11 +148,67 @@ btnExportar.addActionListener(e -> exportarTablaAPDF());
         });
 
         btnExportar.addActionListener(e -> exportarTablaACSV());
+        
 
         tablaReservas.getSelectionModel().addListSelectionListener(e -> cargarDatosSeleccionados());
 setLocationRelativeTo(null);
         setVisible(true);
     }
+   private void generarReportePDF() {
+    Document documento = new Document();
+
+    try {
+        // Ruta del archivo (puede ser Descargas o el proyecto)
+        String ruta = System.getProperty("user.home") + "/Desktop/reporte_reservas.pdf";
+        PdfWriter.getInstance(documento, new FileOutputStream(ruta));
+
+        documento.open();
+
+        // ----- ENCABEZADO -----
+        documento.add(new Paragraph("       RESTAURANTE LA PANCHITA"));
+        documento.add(new Paragraph("     --- REPORTE DE RESERVAS ---"));
+        documento.add(new Paragraph("Fecha: " + java.time.LocalDate.now()));
+        documento.add(new Paragraph("Hora : " + java.time.LocalTime.now().withNano(0)));
+        documento.add(new Paragraph("----------------------------------------\n"));
+
+        int filas = tablaReservas.getRowCount();
+        int columnas = tablaReservas.getColumnCount();
+
+        // ----- RESERVAS -----
+        for (int f = 0; f < filas; f++) {
+
+            documento.add(new Paragraph("Reserva N° " + (f + 1)));
+            documento.add(new Paragraph("----------------------------------------"));
+
+            for (int c = 0; c < columnas; c++) {
+                String campo = tablaReservas.getColumnName(c);
+                Object valor = tablaReservas.getValueAt(f, c);
+
+                documento.add(new Paragraph(
+                        String.format("%-12s: %s", campo, (valor != null ? valor.toString() : ""))
+                ));
+            }
+
+            documento.add(new Paragraph("----------------------------------------\n"));
+        }
+
+        // Pie del ticket
+        documento.add(new Paragraph("Gracias por usar el sistema de reservas."));
+        documento.add(new Paragraph("        *** FIN DEL REPORTE ***"));
+
+        documento.close();
+
+        // ----- ABRIR PDF -----
+        File pdfFile = new File(ruta);
+        if (pdfFile.exists()) {
+            Desktop.getDesktop().open(pdfFile);
+        }
+
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al generar el PDF: " + ex.getMessage());
+    }
+}
     private void exportarTablaAPDF() {
     JFileChooser fileChooser = new JFileChooser();
     fileChooser.setDialogTitle("Guardar PDF");

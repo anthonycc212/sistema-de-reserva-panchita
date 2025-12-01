@@ -729,10 +729,10 @@ private String determinarEstadoPago(String metodoPago) {
 
         jLabel38.setFont(new java.awt.Font("Zilla Slab", 3, 48)); // NOI18N
         jLabel38.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/olla-caliente (1).png"))); // NOI18N
-        jLabel38.setText("restaurante la lucha ");
+        jLabel38.setText("Restaurante panchita-Miraflores ");
         jLabel38.setFocusable(false);
         jLabel38.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        getContentPane().add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, 830, 90));
+        getContentPane().add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 830, 90));
 
         btnabrirsalas.setBackground(new java.awt.Color(102, 102, 255));
         btnabrirsalas.setFont(new java.awt.Font("Microsoft New Tai Lue", 3, 12)); // NOI18N
