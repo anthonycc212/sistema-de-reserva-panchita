@@ -59,7 +59,91 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
         btnexportar.addActionListener(e -> exportarCSV());
         txtBuscar.addActionListener(e -> aplicarFiltro());
     }
+private void generarReportePDF() {
+    Connection con = Conexion.getConexion();
+    if (con == null) {
+        JOptionPane.showMessageDialog(this, "No hay conexión a la base de datos");
+        return;
+    }
 
+    // Rango: últimos 7 días (incluyendo hoy)
+    LocalDate hoy = LocalDate.now();
+    LocalDate hace7dias = hoy.minusDays(6);
+
+    String query = """
+            SELECT fecha, hora, precio
+            FROM reservas
+            WHERE fecha BETWEEN ? AND ?
+            ORDER BY fecha ASC
+            """;
+
+    double totalGeneral = 0.0;
+
+    try (PreparedStatement ps = con.prepareStatement(query)) {
+
+        ps.setDate(1, java.sql.Date.valueOf(hace7dias));
+        ps.setDate(2, java.sql.Date.valueOf(hoy));
+
+        ResultSet rs = ps.executeQuery();
+
+        // Ruta donde se guardará el PDF (escritorio)
+        String home = System.getProperty("user.home");
+        String rutaPDF = home + "/Desktop/Reporte_Semanal_Reservas.pdf";
+
+        // Crear documento PDF
+        com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
+        com.itextpdf.text.pdf.PdfWriter.getInstance(doc, new java.io.FileOutputStream(rutaPDF));
+        doc.open();
+
+        // Título del PDF
+        com.itextpdf.text.Font tituloFont = 
+                new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 18, com.itextpdf.text.Font.BOLD);
+
+        com.itextpdf.text.Paragraph titulo = 
+                new com.itextpdf.text.Paragraph("REPORTE DE INGRESOS (Últimos 7 días)\n\n", tituloFont);
+
+        titulo.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+        doc.add(titulo);
+
+        com.itextpdf.text.Font texto = 
+                new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12);
+
+        // Listar cada reserva
+        while (rs.next()) {
+            Date fecha = rs.getDate("fecha");
+            String hora = rs.getString("hora");
+            double precio = rs.getDouble("precio");
+
+            totalGeneral += precio;
+
+            String registro = String.format(
+                "📅 Fecha: %s    🕒 Hora: %s    💵 Precio: S/ %.2f\n",
+                fecha.toString(), hora, precio
+            );
+
+            doc.add(new com.itextpdf.text.Paragraph(registro, texto));
+        }
+
+        doc.add(new com.itextpdf.text.Paragraph("\n---------------------------------------------\n"));
+
+        // Total general
+        com.itextpdf.text.Font totalFont = 
+                new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 14, com.itextpdf.text.Font.BOLD);
+
+        doc.add(new com.itextpdf.text.Paragraph(
+                "TOTAL GENERAL: S/ " + String.format("%.2f", totalGeneral), totalFont));
+
+        doc.close();
+
+        // Abrir PDF automáticamente
+        java.awt.Desktop.getDesktop().open(new java.io.File(rutaPDF));
+
+        JOptionPane.showMessageDialog(this, "PDF generado correctamente en el Escritorio");
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al generar PDF: " + e.getMessage());
+    }
+}
     private void cargarDatosReservas() {
         modelo.setRowCount(0); // Limpiar tabla
 
@@ -206,7 +290,8 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
         btncerrar = new javax.swing.JButton();
         btneliminarreserva = new javax.swing.JButton();
         btnrepind = new javax.swing.JButton();
-        impresiondereporte = new javax.swing.JButton();
+        reporteestadistico = new javax.swing.JButton();
+        reportedeingresos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         // AJUSTE DE TAMAÑO INICIAL PARA MEJOR RESOLUCIÓN: 1100x700
@@ -287,16 +372,29 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
             }
         });
 
+<<<<<<< HEAD
         impresiondereporte.setText("Imprimir Reporte PDF");
         impresiondereporte.addActionListener(new java.awt.event.ActionListener() {
+=======
+        reporteestadistico.setText("reporte estadistico ");
+        reporteestadistico.addActionListener(new java.awt.event.ActionListener() {
+>>>>>>> ce1857457fdc9ce1d23fd7bbc1a55393328d1f10
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                impresiondereporteActionPerformed(evt);
+                reporteestadisticoActionPerformed(evt);
+            }
+        });
+
+        reportedeingresos.setText("reporte de ingresos ");
+        reportedeingresos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportedeingresosActionPerformed(evt);
             }
         });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
+<<<<<<< HEAD
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
@@ -346,6 +444,80 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
                                                 .addGap(18, 18, 18)
                                                 .addComponent(btnrepeli)))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+=======
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(233, 233, 233)
+                                .addComponent(btnexportar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(69, 69, 69)
+                                .addComponent(btneliminarreserva, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(75, 75, 75)
+                                .addComponent(btncerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(reporteestadistico, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(54, 54, 54)
+                                    .addComponent(btnrepind))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(37, 37, 37)
+                                    .addComponent(btnrepeli, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(reportedeingresos, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(127, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(44, 44, 44))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(34, 34, 34)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(txtBuscar)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(31, 31, 31)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btneliminarreserva, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnexportar)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(btncerrar)))
+                                .addGap(18, 18, 18)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(159, 159, 159)
+                        .addComponent(btnrepind)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnrepeli)
+                        .addGap(18, 18, 18)
+                        .addComponent(reporteestadistico)
+                        .addGap(18, 18, 18)
+                        .addComponent(reportedeingresos)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(789, 789, 789))
+>>>>>>> ce1857457fdc9ce1d23fd7bbc1a55393328d1f10
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -353,6 +525,7 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< HEAD
     private void impresiondereporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_impresiondereporteActionPerformed
         try (Connection con = Conexion.getConexion()) {
             if (con == null) {
@@ -511,6 +684,15 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
         } catch (Exception e) {
             javax.swing.JOptionPane.showMessageDialog(null, "Error al generar el reporte semanal: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
+=======
+    private void btnrepindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrepindActionPerformed
+// Llama a la función estática que genera el PDF de Indicadores y lo abre
+    // ¡Asegúrate de que este es el nombre exacto de la clase!
+    IndicadoresPDFGeneratorindi.generarIndicadoresPDF();
+// --- 1. CALCULAR EL RANGO DE FECHAS (Usando java.time.LocalDate) ---
+    
+    
+>>>>>>> ce1857457fdc9ce1d23fd7bbc1a55393328d1f10
     }//GEN-LAST:event_btnrepindActionPerformed
 
     private void btneliminarreservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarreservaActionPerformed
@@ -662,6 +844,7 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnexportarActionPerformed
 
     private void btnrepeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrepeliActionPerformed
+<<<<<<< HEAD
 // 1. Elegir archivo de destino (PDF)
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar Reporte de Reservas Eliminadas (PDF)");
@@ -710,12 +893,36 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Error al generar el reporte de eliminadas: " + e.getMessage(), "Error PDF", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+=======
+// Crear una instancia del JDialog del reporte
+   // Crear una instancia de la ventana de reporte estilizado
+     ReporteEliminadasDialog reporte = new  ReporteEliminadasDialog(null, true); 
+    // Llama a la función estática que genera el PDF y lo abre
+    ReportePDFGeneratoreli.generarReportePDFeli();
+    // Muestra la ventana del reporte
+    reporte.setVisible(true); // TODO add your handling code here:
+>>>>>>> ce1857457fdc9ce1d23fd7bbc1a55393328d1f10
     }//GEN-LAST:event_btnrepeliActionPerformed
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         String textoBusqueda = txtBuscar.getText().trim();
         cargarDatosReservasFiltradas(textoBusqueda);
     }//GEN-LAST:event_btnFiltrarActionPerformed
+
+    private void reporteestadisticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteestadisticoActionPerformed
+       // Crear una instancia de la ventana de reporte estilizado
+     reporteEstadistico reporte = new  reporteEstadistico(null, true); 
+    // Llama a la función estática que genera el PDF y lo abre
+     reportogeneradorpdfestadistico.generarReportePDFestadistico();
+    // Muestra la ventana del reporte
+    
+    // Muestra la ventana del reporte
+    reporte.setVisible(true); // TODO add your handling code here:
+    }//GEN-LAST:event_reporteestadisticoActionPerformed
+
+    private void reportedeingresosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportedeingresosActionPerformed
+ generarReportePDF();
+    }//GEN-LAST:event_reportedeingresosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -766,12 +973,13 @@ public class HistorialReservasDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnexportar;
     private javax.swing.JButton btnrepeli;
     private javax.swing.JButton btnrepind;
-    private javax.swing.JButton impresiondereporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton reportedeingresos;
+    private javax.swing.JButton reporteestadistico;
     private javax.swing.JTable tblReservas;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables

@@ -4,27 +4,30 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/VentanaEliminarReserva.java</file>
+            <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/IndicadoresPDFGeneratorindi.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/NodoReserva.java</file>
-            <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/txtId.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/Usuario.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/Main.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/loginDao.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/Reserva.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/VentanaModificarReserva.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/Delivery/Pedido.java</file>
+            <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/ReporteEliminadasDialog.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/SalasDao.java</file>
+            <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/ReporteIngresosDetalle.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/ReservaDAO.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/Registroclientes.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/RegistroUsuario.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/reportesreservas/Reserva.java</file>
+            <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/ReportePDFGeneratoreli.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/Platos.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/MetodoPagoDialog.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/Delivery/PedidoDAO.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/Delivery/ProductoDAO.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/loginclientes.java</file>
-            <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/JDateChooser.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/PlatosDao.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/login.java</file>
+            <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/reportogeneradorpdfestadistico.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/Conexion.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/SelectorRol.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/Delivery/frmDelivery.java</file>
@@ -45,6 +48,7 @@
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/reportesreservas/FrmReportesReservasPanel.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/ListaReservas.java</file>
             <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/conex/mainselector.java</file>
+            <file>file:/C:/Users/antho/sistema-de-reserva-panchita/Reservaciones%20restaurante/Reservaciones%20restaurante/Reservaciones%20restaurante/src/vista/reporteEstadistico.java</file>
         </group>
     </open-files>
 </project-private>
